@@ -90,7 +90,8 @@ function Signin(props) {
                     </div>
                   </form>
                   <div class="text-center mt-3">
-                    Don't have an account? <Link to={props.register}>Sign up</Link>
+                    <p>Don't have an account? <Link to={props.register}>Sign up</Link></p>
+                    
                     <p>
                       You ain't {props.name}? <Link to="/">Switch here!</Link>
                     </p>

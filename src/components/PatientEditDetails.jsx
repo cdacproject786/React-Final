@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useSyncExternalStore } from "react";
 import { useState } from "react";
 import Button from 'react-bootstrap/Button';
 import useAuth from "../hooks/useAuth";
 import Form from 'react-bootstrap/Form';
 import axios from "axios";
 import Modal from 'react-bootstrap/Modal';
-import { useNavigate } from "react-router-dom";
+import { useAsyncError, useNavigate } from "react-router-dom";
 import Figure from 'react-bootstrap/Figure';
 import profile from "../profile.png"
 import StatusModal from "../pages/StatusModal";
@@ -14,14 +14,14 @@ function PatientEditDetails() {
   const [validated, setValidated] = useState(false);
 
   const navigate = useNavigate()
-  const { auth, patient } = useAuth();
+  const { auth, patient,address } = useAuth();
   const accessT = "Bearer " + auth.accessToken;
   const uid = auth.uid
   const addid = patient.addressid
 
-  const [add_id, setAdd_id] = useState('')
-  const [addressData, setAddressData] = useState({})
-  const [editProfile, setEditProfile] = useState(true);
+
+
+
   const [modalShow, setModalShow] = useState(false);
   const [title, setTitle] = useState()
   const [body, setBody] = useState()
@@ -36,13 +36,24 @@ function PatientEditDetails() {
   const [adhaar_card, setAadhaar] = useState(patient.adhaarcard);
   const [marital_status, setMartialStatus] = useState(patient.maritalstatus);
   const [occupation, setOccupation] = useState(patient.occupation)
-  const [photo, , setPhoto] = useState(profile)
-  const [image, setImage] = useState({ preview: '', data: '' })
+  const [photo, setPhoto] = useState(patient.profilephoto)
+  const [patadd, setPatadd] = useState('')
+  const [city, setCity] = useState(address.city);
+  const [user_state, setState] = useState(address.state);
+  const [country, setCountry] = useState(address.country);
+  const [pincode, setPincode] = useState(address.pincode);
+  const [address_line_1, setAddressLine1] = useState(address.addressline1);
+
+
+   
+  //const setadd = () => {setAddressLine1(patadd.Address_line_1);setCity(patadd.City);setState(patadd.User_State);setCountry(patadd.Country);setPincode(patadd.PinCode)}
 
   
 
+ 
   useEffect(() => {
-    const result2 = axios.get("http://localhost:4001/patient/getaddressDetails/" + addid, {
+
+    const result2 = axios.get("http://localhost:4001/patient/getaddressDetails/" + patient.addressid, {
       headers: {
         "Content-Type": "application/json",
         Authorization: accessT,
@@ -50,28 +61,37 @@ function PatientEditDetails() {
     })
       .then((resp) => {
         console.log(resp.data);
-        setAddressData(resp.data)
+        setPatadd(resp.data)
+        
+      //setadd()
       })
 
   }, [])
 
-  const [address_line_1, setAddressLine1] = useState(addressData.Address_line_1);
 
-  const [city, setCity] = useState(addressData.City);
-  const [user_state, setState] = useState(addressData.User_State);
-  const [country, setCountry] = useState(addressData.Country);
-  const [pincode, setPincode] = useState(addressData.PinCode);
   const handleFileChange = (e) => {
-    const img = {
-      preview: URL.createObjectURL(e.target.files[0]),
-      data: e.target.files[0],
-    }
-    setImage(img)
+    const image = e.target.files[0]
+
+    transformImage(image)
   }
+
+  const transformImage = (image) => {
+    const reader = new FileReader()
+    if (image) {
+      reader.readAsDataURL(image)
+      reader.onloadend = () => {
+      setPhoto(reader.result)
+      }
+    } else {
+      setPhoto('')
+    }
+  }
+
   const handleSaveChanges = (e) => {
     e.preventDefault()
+
     let formData = new FormData()
-    formData.append('profilephoto', image.data)
+    formData.append('profile_photo', photo)
     formData.append('fname', fname)
     formData.append('lname', lname)
     formData.append('phone', phone)
@@ -81,7 +101,7 @@ function PatientEditDetails() {
     formData.append('gender', gender)
     formData.append('adhaar_card', adhaar_card)
     formData.append('marital_status', marital_status)
-    formData.append('address_line_1',address_line_1)
+    formData.append('address_line_1', address_line_1)
     formData.append('city', city)
     formData.append('user_state', user_state)
     formData.append('country', country)
@@ -123,7 +143,7 @@ function PatientEditDetails() {
     Single: 'U'
   }
 
-  
+
   return (
 
     <div
@@ -138,19 +158,28 @@ function PatientEditDetails() {
         <Modal.Body>
           <form className="row g-3" onSubmit={handleSaveChanges}>
             <Figure>
-              <Figure.Image
-                width={171}
-                height={180}
-                roundedCircle={true}
-                src={patient.profilephoto}
-              />
+              {photo ? (
+                <Figure.Image
+                  width={171}
+                  height={180}
+                  roundedCircle={true}
+                  src={photo}
+                />
+              ) : (
+                <Figure.Image
+                  width={171}
+                  height={180}
+                  roundedCircle={true}
+                  src={profile}
+                />
+              )}
               <Figure.Caption>
                 Profile Photo
               </Figure.Caption>
             </Figure>
             <Form.Group controlId="formFile" className="mb-3">
               <Form.Label>Upload Photo</Form.Label>
-              <Form.Control type="file" onChange={handleFileChange} />
+              <Form.Control type="file" accept="image/" onChange={handleFileChange} />
             </Form.Group>
             <div className="col-md-6">
               <input type="text" className="form-control" id="FirstName" placeholder="First Name" required
@@ -187,7 +216,7 @@ function PatientEditDetails() {
             </div>
 
             <div className="col-md-4">
-              <input type="number" className="form-control" id="pincode" placeholder="Pincode" required
+              <input type="text" className="form-control" id="pincode" placeholder="Pincode" required
                 value={pincode} onChange={p => { setPincode(p.target.value) }} />
             </div>
 
@@ -207,7 +236,7 @@ function PatientEditDetails() {
             </div>
 
             <div className="col-md-4">
-              <input type="number" className="form-control" id="aadhaar" placeholder="Aadhaar Number" required
+              <input type="text" className="form-control" id="aadhaar" placeholder="Aadhaar Number" required
                 value={adhaar_card} onChange={(p) => { setAadhaar(p.target.value) }} />
             </div>
 
@@ -224,7 +253,7 @@ function PatientEditDetails() {
                 value={occupation} onChange={p => { setOccupation(p.target.value) }} />
             </div>
             <div className="col-md-2">
-              <Button variant="primary" onClick={handleSaveChanges} >Save changes</Button>
+              <Button variant="primary" type="submit" >Save changes</Button>
             </div>
 
           </form>
@@ -240,6 +269,6 @@ function PatientEditDetails() {
 
 
   );
-}
 
+}
 export default PatientEditDetails;

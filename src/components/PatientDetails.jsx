@@ -10,19 +10,19 @@ import {
   CDBSidebarMenu,
   CDBSidebarMenuItem,
 } from "cdbreact";
-import { setSelectionRange } from "@testing-library/user-event/dist/utils";
+
 
 
 function PatientDetails(props) {
-  const { auth, setPatient, patient } = useAuth();
+  const { auth, setPatient, setAddress, patient } = useAuth();
   const accessT = "Bearer " + auth.accessToken;
   const uid = auth.uid;
   const [fname, setFname] = useState()
   const [lname, setLname] = useState()
 
 
-  const getData = () => {
-    const result = axios.get("http://localhost:4001/patient/getPatientPrimaryDetails/" + uid, {
+  const getData = async () => {
+    const result = await axios.get("http://localhost:4001/patient/getPatientPrimaryDetails/" + uid, {
       headers: {
         "Content-Type": "application/json",
         Authorization: accessT,
@@ -39,16 +39,37 @@ function PatientDetails(props) {
       const maritalstatus = response?.data?.MARITAL_STATUS
       const occupation = response?.data?.OCCUPATION
       const addressid = response?.data?.ADDRESS_ID
+      const email = response?.data?.EMAIL
       
       setFname(fname)
       setLname(lname)
-      setPatient({ fname, lname, profilephoto, dateofbirth, adhaarcard, phone, gender, maritalstatus, occupation, addressid })
+      setPatient({ email,fname, lname, profilephoto, dateofbirth, adhaarcard, phone, gender, maritalstatus, occupation, addressid })
     })
+   
+  };
+
+  const getADDData = async () => {
+    const result = await axios.get("http://localhost:4001/patient/getaddressDetails/" + patient.addressid, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: accessT,
+      }
+    }).then((response) => {
+      console.log(response.data)
+      const addressline1 = response?.data?.Address_line_1
+      const city = response?.data?.City
+      const state = response?.data?.User_State
+      const country = response?.data?.Country
+      const pincode = response?.data?.PinCode
+      
+      setAddress({ addressline1,city,state,country,pincode })
+    })
+   
   };
 
   useEffect(() => {
     getData()
-
+    getADDData()
   }, []);
 
   const [editProfile, setEditProfile] = useState(false);
@@ -110,7 +131,7 @@ function PatientDetails(props) {
           <CDBSidebarContent className="sidebar-content">
             <CDBSidebarMenu>
               <CDBSidebarMenuItem className="sidebaritem" >
-                <h3>{fname} {lname}</h3>
+                <h4>{fname} {lname}</h4>
               </CDBSidebarMenuItem>
               <CDBSidebarMenuItem icon="user" className="sidebaritem" role="tablist" onClick={handleProfileClick} >
                 Edit Profile

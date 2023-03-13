@@ -8,12 +8,12 @@ import StatusModal from "../pages/StatusModal";
 function PatientRegister(props) {
     const [fname, setFname] = useState('');
     const [lname, setLname] = useState('');
-    const [mobile, setMobile] = useState('');
+    const [phone, setMobile] = useState('');
     const [email, setEmail] = useState('');
     const [pwd, setPwd] = useState('');
     const [date_of_birth, setDateofbirth] = useState('');
     const [gender, setGender] = useState('');
-    const [aadhaar, setAadhaar] = useState('');
+    const [adhaar_card, setAadhaar] = useState('');
     const [marital_status, setMartialStatus] = useState('');
     const [address_line_1, setAddressLine1] = useState('');
     
@@ -33,8 +33,8 @@ function PatientRegister(props) {
         e.preventDefault();
         try {
             let data = {
-                fname, lname, mobile, email, pwd, occupation,
-                date_of_birth, gender, aadhaar, marital_status, address_line_1, city, user_state, country, pincode
+                fname, lname, phone, email, pwd, occupation,
+                date_of_birth, gender, adhaar_card, marital_status, address_line_1, city, user_state, country, pincode
             }
             const result = axios.post("http://localhost:4001/patient/register", data, {
                 headers: {
@@ -92,7 +92,7 @@ function PatientRegister(props) {
                     </div>
                     <div className="col-md-3">
                         <input type="text" className="form-control" id="mob" placeholder="Mobile Number" required
-                            value={mobile} onChange={p => { setMobile(p.target.value) }} />
+                            value={phone} onChange={p => { setMobile(p.target.value) }} />
                     </div>
                     <div className="col-md-3">
                         <input type="email" className="form-control" id="inputEmail4" placeholder="Email Id" required
@@ -125,7 +125,7 @@ function PatientRegister(props) {
                     </div>
 
                     <div className="col-md-4">
-                        <input type="number" className="form-control" id="pincode" placeholder="Pincode" required
+                        <input type="text" className="form-control" id="pincode" placeholder="Pincode" required
                             value={pincode} onChange={p => { setPincode(p.target.value) }} />
                     </div>
 
@@ -144,8 +144,8 @@ function PatientRegister(props) {
                     </div>
 
                     <div className="col-md-4">
-                        <input type="number" className="form-control" id="aadhaar" placeholder="Aadhaar Number" required
-                            value={aadhaar} onChange={(p) => { setAadhaar(p.target.value) }} />
+                        <input type="test" className="form-control" id="aadhaar" placeholder="Aadhaar Number" required
+                            value={adhaar_card} onChange={(p) => { setAadhaar(p.target.value) }} />
                     </div>
 
                     <div className="col-md-4">

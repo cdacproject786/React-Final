@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Signin from '../components/Signin'
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 
 function DoctorSignin() {
@@ -98,9 +98,9 @@ function DoctorSignin() {
                   </div>
                 </form>
                 <div className="text-center mt-3">
-                  Don't have an account? <a href="/Doctor/Register">Sign up</a>
+                  Don't have an account? <Link to="/Doctor/Register">Sign up</Link>
                   <p>
-                    You ain't Doctor? <a href="/">Switch here!</a>
+                    You ain't Doctor? <Link to="/">Switch here!</Link>
                   </p>
                 </div>
               </div>

@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import Navbar from "../components/Navbar"
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 function DoctorRegistration() {
@@ -16,37 +16,37 @@ function DoctorRegistration() {
     setMaxYear(year);
   };
   const genders = {
-    Gender:'',
+    Gender: '',
     Male: 'M',
     Female: 'F',
     NotDisclosed: 'N'
-}
-const maritals = {
-  "Marital Status":'',
+  }
+  const maritals = {
+    "Marital Status": '',
     Married: 'M',
     Single: 'S',
     Divorced: 'D',
 
-}
-const EstabType ={
-  "Establishment Type":"",
-  Clinic:'C',
-  Private:'P',
-  Government:'G',
+  }
+  const EstabType = {
+    "Establishment Type": "",
+    Clinic: 'C',
+    Private: 'P',
+    Government: 'G',
 
-}
+  }
 
-const SecurityQuestions ={
-  "Security Questions":"",
-  "Sequrity question 1":"Sequrity question 1",
-  "Sequrity question 2":"Sequrity question 2",
-  "Sequrity question 3":"Sequrity question 3",
+  const SecurityQuestions = {
+    "Security Questions": "",
+    "Sequrity question 1": "Sequrity question 1",
+    "Sequrity question 2": "Sequrity question 2",
+    "Sequrity question 3": "Sequrity question 3",
 
-}
+  }
 
-//same as DB
+  //same as DB
   const [fname, setfname] = useState("");
-  const [lname , setlname ] = useState("");
+  const [lname, setlname] = useState("");
   const [phoneNumber, setphoneNumber] = useState("");
   const [email, setemail] = useState("");
   const [pwd, setpwd] = useState("");
@@ -75,66 +75,69 @@ const SecurityQuestions ={
   const [fees, setFees] = useState("");
   const [doctorAvailTime, setdoctorAvailTime] = useState("");
   const [doctorAvailDay, setdoctorAvailDay] = useState("");
-  const [medicalRegId,setMedicalRegId] = useState("");
-  const [specialization,setSpecialization] = useState("");
-  const [establishmentCity,setEstablishmentCity] = useState("");
+  const [medicalRegId, setMedicalRegId] = useState("");
+  const [specialization, setSpecialization] = useState("");
+  const [establishmentCity, setEstablishmentCity] = useState("");
   const [yearOfExperience, setYearOfExperience] = useState("");
   const establishmentProof = "tfuqbfiugbf84154+8514+15goyuvb";
   const [modalShow, setModalShow] = useState(false);
-  const [title,setTitle] = useState()
-  const [body,setBody] = useState()
+  const [title, setTitle] = useState()
+  const [body, setBody] = useState()
 
-  const submitDoctor = async (e) =>{
+  const submitDoctor = async (e) => {
     e.preventDefault();
-    try{ 
-      let data = {fname, lname ,phoneNumber, email,pwd,dateofbirth,gender,adhaarCard,maritalstatus,securityQuestion,
-      securityQuestionsAnswer,addressLine1,city,userState,country,pinCode,panCard,degree, college, 
-      registrationCouncil, registrationYear,yearOfCompletion,establishment,establishmentName,establishmentPin, 
-      establishmentLocation, fees, doctorAvailTime, doctorAvailDay,medicalRegId,specialization,establishmentCity,yearOfExperience, establishmentProof}
-      console.log(data)  
-     const result = await axios.post("http://localhost:9010/doctor/register",data, {
-      
-      headers: {
-          'Content-Type': 'application/json'
+    try {
+      let data = {
+        fname, lname, phoneNumber, email, pwd, dateofbirth, gender, adhaarCard, maritalstatus, securityQuestion,
+        securityQuestionsAnswer, addressLine1, city, userState, country, pinCode, panCard, degree, college,
+        registrationCouncil, registrationYear, yearOfCompletion, establishment, establishmentName, establishmentPin,
+        establishmentLocation, fees, doctorAvailTime, doctorAvailDay, medicalRegId, specialization, establishmentCity, yearOfExperience, establishmentProof
       }
-  }).then(response => {
-    console.log("After axios");
-      if(response){
-        console.log("IN Response")
-      handleStatusModal("Registration Status","Successfull !!")
-      navigate("/Doctor")}
-      else
-      handleStatusModal("Registration Status","Unsuccessfull !!")
-  })
-} catch (error) {
-  
-}
-     
-     
-}
-const handleStatusModal = (title,body) => {
-  setTitle(title)
-  setBody(body)
-  setModalShow(true)
-  
-}  
-  
+      console.log(data)
+      const result = await axios.post("http://localhost:9010/doctor/register", data, {
+
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(response => {
+        console.log("After axios");
+        if (response) {
+          console.log("IN Response")
+          handleStatusModal("Registration Status", "Successfull !!")
+          navigate("/Doctor")
+        }
+        else
+          handleStatusModal("Registration Status", "Unsuccessfull !!")
+      })
+    } catch (error) {
+
+    }
+
+
+  }
+  const handleStatusModal = (title, body) => {
+    setTitle(title)
+    setBody(body)
+    setModalShow(true)
+
+  }
+
   // const myFunction =()=> {
   //   document.getElementById("myform").reset();
   // }
   return (
     <div>
-      <Navbar/>
+      <Navbar />
       <div className="container signin-panel">
         <div className="reghead">
           <h4>Doctors Registeration</h4>
           <h6>
-            Already have an account? <a href="/Doctor">Sign in here</a>
+            Already have an account? <Link to="/Doctor/Login">Sign In</Link>
           </h6>
         </div>
         <hr />
 
-        <form className="row g-3" onSubmit={(e)=>submitDoctor(e)} id="myForm">
+        <form className="row g-3" onSubmit={(e) => submitDoctor(e)} id="myForm">
           <div className="col-md-6"> {/* FirstName */}
             <input
               type="text"
@@ -154,9 +157,9 @@ const handleStatusModal = (title,body) => {
               className="form-control"
               id="LastName"
               placeholder="Last Name"
-              value={lname }
+              value={lname}
               onChange={(p) => {
-                setlname (p.target.value);
+                setlname(p.target.value);
               }}
               required
             />
@@ -357,7 +360,7 @@ const handleStatusModal = (title,body) => {
               required
             />
           </div>
-          
+
           <div className="col-md-4"> {/* specialization */}
             <input
               type="text"
@@ -365,7 +368,7 @@ const handleStatusModal = (title,body) => {
               id="specialization"
               placeholder="Specialization"
               value={specialization}
-              onChange={p=>setSpecialization(p.target.value)}
+              onChange={p => setSpecialization(p.target.value)}
               required
             />
           </div>
@@ -377,7 +380,7 @@ const handleStatusModal = (title,body) => {
               id="degree"
               placeholder="Highest Degree"
               value={degree}
-              onChange={p=>setdegree(p.target.value)}
+              onChange={p => setdegree(p.target.value)}
               required
             />
           </div>
@@ -387,9 +390,9 @@ const handleStatusModal = (title,body) => {
               className="form-control"
               id="college"
               placeholder="College Name"
-             value={college}
-             onChange={p=>setcollege(p.target.value)}
-             required
+              value={college}
+              onChange={p => setcollege(p.target.value)}
+              required
             />
           </div>
 
@@ -401,7 +404,7 @@ const handleStatusModal = (title,body) => {
               id="yearOfExperience"
               name="yearOfExperience"
               value={yearOfExperience}
-              onChange={p=>setYearOfExperience(p.target.value)}
+              onChange={p => setYearOfExperience(p.target.value)}
               required
             />
           </div>
@@ -414,7 +417,7 @@ const handleStatusModal = (title,body) => {
               id="medicalRegId"
               name="medicalRegId"
               value={medicalRegId}
-              onChange={p=>setMedicalRegId(p.target.value)}
+              onChange={p => setMedicalRegId(p.target.value)}
               required
             />
           </div>
@@ -426,7 +429,7 @@ const handleStatusModal = (title,body) => {
               id="registrationCouncil"
               placeholder="Regitsration Council"
               value={registrationCouncil}
-              onChange={p=>setregistrationCouncil(p.target.value)}
+              onChange={p => setregistrationCouncil(p.target.value)}
               required
             />
           </div>
@@ -440,7 +443,7 @@ const handleStatusModal = (title,body) => {
               min="1900"
               max={maxYear || currentYear.toString()}
               value={registrationYear}
-              onChange={p=>setregistrationYear(p.target.value)}
+              onChange={p => setregistrationYear(p.target.value)}
               required
             />
           </div>
@@ -454,13 +457,13 @@ const handleStatusModal = (title,body) => {
               min="1900"
               max={maxYear || currentYear.toString()}
               value={yearOfCompletion}
-              onChange={p=>setyearOfCompletion(p.target.value)}
+              onChange={p => setyearOfCompletion(p.target.value)}
               required
             />
           </div>
           <div className="col-md-4"> {/* establishmentType */}
-            <select id="establishment" className="form-control" required value={establishment} onChange={p=>setestablishment(p.target.value)}>
-            {Object.entries(EstabType).map((g) => (
+            <select id="establishment" className="form-control" required value={establishment} onChange={p => setestablishment(p.target.value)}>
+              {Object.entries(EstabType).map((g) => (
                 <option value={g[1]}>{g[0]}</option>
               ))}
             </select>
@@ -472,7 +475,7 @@ const handleStatusModal = (title,body) => {
               id="establishmentName"
               placeholder="Establishment Name"
               value={establishmentName}
-              onChange={p=>setestablishmentName(p.target.value)}
+              onChange={p => setestablishmentName(p.target.value)}
               required
             />
           </div>
@@ -496,7 +499,7 @@ const handleStatusModal = (title,body) => {
               id="establishmentPin"
               placeholder="Establishment Pin Code"
               value={establishmentPin}
-              onChange={p=>setEstablishmentPin(p.target.value)}
+              onChange={p => setEstablishmentPin(p.target.value)}
               required
             />
           </div>
@@ -507,7 +510,7 @@ const handleStatusModal = (title,body) => {
               id="fees"
               placeholder="Fees"
               value={fees}
-              onChange={p=>setFees(p.target.value)}
+              onChange={p => setFees(p.target.value)}
               required
             />
           </div>
@@ -518,11 +521,11 @@ const handleStatusModal = (title,body) => {
               id="establishmentLocation"
               placeholder="Establishment Locality"
               value={establishmentLocation}
-              onChange={p=>setestablishmentLocation(p.target.value)}
+              onChange={p => setestablishmentLocation(p.target.value)}
               required
             />
           </div>
-         
+
           <div className="col-md-6"> {/* doctorAvailTime */}
             <input
               type="text"
@@ -530,7 +533,7 @@ const handleStatusModal = (title,body) => {
               id="doctorAvailTime"
               placeholder="Available Time Slots (E.g: 10 am to 1 pm ,6pm to 10 pm, etc.)"
               value={doctorAvailTime}
-              onChange={p=>setdoctorAvailTime(p.target.value)}
+              onChange={p => setdoctorAvailTime(p.target.value)}
               required
             />
           </div>
@@ -541,14 +544,14 @@ const handleStatusModal = (title,body) => {
               id="doctorAvailDay"
               placeholder="Available Days (E.g: Monday,Tuesday,Thursday etc.)"
               value={doctorAvailDay}
-              onChange={p=>setdoctorAvailDay(p.target.value)}
+              onChange={p => setdoctorAvailDay(p.target.value)}
               required
             />
           </div>
 
           <div className="col-12"> {/* securityQuestion */}
-          <select id="securityQuestion" className="form-control" required value={securityQuestion} onChange={p=>setsecurityQuestion(p.target.value)}>
-            {Object.entries(SecurityQuestions).map((g) => (
+            <select id="securityQuestion" className="form-control" required value={securityQuestion} onChange={p => setsecurityQuestion(p.target.value)}>
+              {Object.entries(SecurityQuestions).map((g) => (
                 <option value={g[1]}>{g[0]}</option>
               ))}
             </select>

@@ -17,7 +17,7 @@ function Home() {
               <button type="button" class="btn btn-success btn-block" onClick={() => { navigate("/Patient/Login") }}>I am a Patient !</button>
             </div>
             <div class="col-sm-12 col-md-3 mb-3">
-              <button type="button" class="btn btn-success btn-block" onClick={() => { navigate("/Doctor") }}>I am a Doctor !</button>
+              <button type="button" class="btn btn-success btn-block" onClick={() => { navigate("/Doctor/Login") }}>I am a Doctor !</button>
             </div>
           </div>
         </div>
