@@ -3,46 +3,45 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
 import useAuth from "../hooks/useAuth";
 import axios from "axios";
+import StatusModal from "../pages/StatusModal";
 
 function Signin(props) {
   const navigate = useNavigate();
-  const { setAuth } = useAuth();
+  const { setAuth, setID } = useAuth();
   const [email, setEmail] = useState('');
   const [pwd, setPwd] = useState('');
+
+  const [modalShow, setModalShow] = useState(false);
+  const [title, setTitle] = useState()
+  const [body, setBody] = useState()
 
 
   function loginpatient(event) {
     event.preventDefault();
     let data = { email, pwd };
-    try {
-      const result = axios.post("http://localhost:4001/patient/login", data, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then((response) => {
-        console.log(response)
-        const uid = response?.data?.uid
-        const accessToken = response?.data?.accessToken
 
-        setAuth({ email, pwd, uid, accessToken })//storing accessToken in Auth object
-        navigate("/PatientDetails")
-      })
-      /* console.log(result?.data?.accessToken) */
-      setEmail('')
-      setPwd('')
-
-    } catch (error) {
-      console.log(error)
-      if (!error?.result) {
-        alert('No Server Response')
-      } else if (error.result?.status === 400) {
-        alert('Missing Username or Password')
-      } else if (error.result?.status === 401) {
-        alert('Unathorized User')
-      } else {
-        alert('Login Failed')
+    const result = axios.post("http://localhost:4001/patient/login", data, {
+      headers: {
+        'Content-Type': 'application/json'
       }
-    }
+    }).then((response) => {
+      
+      const uid = response?.data?.uid
+      const accessToken = response?.data?.accessToken
+      setAuth({ email, uid, accessToken })//storing accessToken in Auth object
+      navigate("/PatientOk")
+    }).catch((error) => {
+      if (error?.response?.status === 401)
+        handleStatusModal("Login Status", "Unauthorized User !!")
+    })
+    /* console.log(result?.data?.accessToken) */
+    setEmail('')
+    setPwd('')
+  }
+  const handleStatusModal = (title, body) => {
+    setTitle(title)
+    setBody(body)
+    setModalShow(true)
 
   }
   return (
@@ -95,7 +94,16 @@ function Signin(props) {
                     <p>
                       You ain't {props.name}? <Link to="/">Switch here!</Link>
                     </p>
+                    <p>
+                      Forgot Password ? <Link to="/Patient/ForgotPass">Switch here!</Link>
+                    </p>
                   </div>
+                  <StatusModal
+                    show={modalShow}
+                    onHide={() => { setModalShow(false); navigate("/Patient/Login") }}
+                    title={title}
+                    body={body}
+                  />
                 </div>
               </div>
             </div>

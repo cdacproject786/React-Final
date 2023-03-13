@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import Navbar from "./Navbar";
 import axios from "axios";
 
-import PatientService from '../jsfunctions/patient.service';
+import { Link, useNavigate } from "react-router-dom";
+import StatusModal from "../pages/StatusModal";
 
 function PatientRegister(props) {
     const [fname, setFname] = useState('');
@@ -10,44 +11,64 @@ function PatientRegister(props) {
     const [mobile, setMobile] = useState('');
     const [email, setEmail] = useState('');
     const [pwd, setPwd] = useState('');
-    const [dateofbirth, setDateofbirth] = useState('');
-    const [gender, setGender] = useState('Gender');
+    const [date_of_birth, setDateofbirth] = useState('');
+    const [gender, setGender] = useState('');
     const [aadhaar, setAadhaar] = useState('');
-    const [martialstatus, setMartialStatus] = useState('Martial Status');
-    const [securityquestion, setSecurityQuestion] = useState('');
-    const [securityanswer, setSecurityAnswer] = useState('');
-    const [addressline1, setAddressLine1] = useState('');
-    const [addressline2, setAddressLine2] = useState('');
+    const [marital_status, setMartialStatus] = useState('');
+    const [address_line_1, setAddressLine1] = useState('');
+    
     const [city, setCity] = useState('');
-    const [state, setState] = useState('');
+    const [user_state, setState] = useState('');
     const [country, setCountry] = useState('');
     const [pincode, setPincode] = useState('');
+    const [occupation, setOccupation] = useState('')
+
+    
+    const navigate = useNavigate();
+    const [modalShow, setModalShow] = useState(false);
+    const [title,setTitle] = useState()
+    const [body,setBody] = useState()
 
     function submitPatient(e) {
         e.preventDefault();
-        let data = {
-            fname, lname, mobile, email, pwd,
-            dateofbirth, gender, aadhaar, martialstatus, securityquestion,
-            securityanswer, addressline1, addressline2, city, state, country, pincode
-        }
-        const result = axios.post("http://localhost:4001/patient/register", data, {
-            headers: {
-                'Content-Type': 'application/json'
+        try {
+            let data = {
+                fname, lname, mobile, email, pwd, occupation,
+                date_of_birth, gender, aadhaar, marital_status, address_line_1, city, user_state, country, pincode
             }
-        }).then(response => {
-            console.log(response.data);
-        })
+            const result = axios.post("http://localhost:4001/patient/register", data, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                if(response)
+                handleStatusModal("Registration Status","Successfull !!")
+                else
+                handleStatusModal("Registration Status","Unsuccessfull !!")
+            })
+        } catch (error) {
+            
+        }
+        
+        
+        
+    }
 
+    const handleStatusModal = (title,body) => {
+        setTitle(title)
+        setBody(body)
+        setModalShow(true)
+        
     }
 
     const genders = {
         Male: 'M',
         Female: 'F',
-        NotDisclosed: 'N'
+        
     }
     const martials = {
         Married: 'M',
-        Single: 'S'
+        Single: 'U'
     }
 
 
@@ -57,7 +78,7 @@ function PatientRegister(props) {
             <div className="container signin-panel">
                 <div className="reghead">
                     <h4>{props.name} Registeration</h4>
-                    <h6>Already have an account? <a href={props.link}>Sign in here</a></h6>
+                    <h6>Already have an account? <Link to="/Patient/Login">Sign in here</Link></h6>
                 </div><hr />
 
                 <form className="row g-3" onSubmit={submitPatient}>
@@ -86,20 +107,17 @@ function PatientRegister(props) {
                         <div className="form-text confirm-message"></div>
                     </div>
                     <div className="col-12">
-                        <input type="text" className="form-control" id="inputAddress" placeholder="Address Lane 1" required
-                            value={addressline1} onChange={p => { setAddressLine1(p.target.value) }} />
+                        <input type="text" className="form-control" id="inputAddress" placeholder="Address Line 1" required
+                            value={address_line_1} onChange={p => { setAddressLine1(p.target.value) }} />
                     </div>
-                    <div className="col-12">
-                        <input type="text" className="form-control" id="inputAddress2" placeholder="Address Lane 2"
-                            value={addressline2} onChange={p => { setAddressLine2(p.target.value) }} />
-                    </div>
+
                     <div className="col-md-4">
                         <input type="text" className="form-control" id="inputCity" placeholder="City" required
                             value={city} onChange={p => { setCity(p.target.value) }} />
                     </div>
                     <div className="col-md-4">
                         <input type="text" className="form-control" id="inputState" placeholder="State" required
-                            value={state} onChange={p => { setState(p.target.value) }} />
+                            value={user_state} onChange={p => { setState(p.target.value) }} />
                     </div>
                     <div className="col-md-4">
                         <input type="text" className="form-control" id="country" placeholder="Country" required
@@ -114,7 +132,7 @@ function PatientRegister(props) {
                     <div className="col-md-4" id='divlabel'>
                         <label htmlFor="year" >Date of Birth:</label>
                         <input type="date" className="form-control" id="dateofbirth" placeholder="DD/MM/YYYY" required
-                            value={dateofbirth} onChange={p => { setDateofbirth(p.target.value) }} />
+                            value={date_of_birth} onChange={p => { setDateofbirth(p.target.value) }} />
                     </div>
                     <div className="col-md-4">
                         <select id="inputState" className="form-control" required
@@ -123,7 +141,6 @@ function PatientRegister(props) {
                                 Object.entries(genders).map(g => (<option value={g[1]}>{g[0]}</option>))
                             }
                         </select>
-
                     </div>
 
                     <div className="col-md-4">
@@ -133,28 +150,31 @@ function PatientRegister(props) {
 
                     <div className="col-md-4">
                         <select id="inputState" className="form-control" required
-                            value={martialstatus} onChange={p => setMartialStatus(p.target.value)}>
+                            value={marital_status} onChange={p => setMartialStatus(p.target.value)}>
                             {
                                 Object.entries(martials).map(m => (<option value={m[1]}>{m[0]}</option>))
                             }
                         </select>
                     </div>
-                    <div className="col-12">
-                        <input type="text" className="form-control" id="securityquestion" placeholder="Security Question"
-                            value={securityquestion} onChange={p => { setSecurityQuestion(p.target.value) }} />
-                    </div>
-                    <div className="col-12">
-                        <input type="text" className="form-control" id="securityanswer" placeholder="Security Answer"
-                            value={securityanswer} onChange={(p) => { setSecurityAnswer(p.target.value) }} />
+                    
+                    <div className="col-md-4">
+                        <input type="text" className="form-control" id="occupation" placeholder="Occupation" required
+                            value={occupation} onChange={p => { setOccupation(p.target.value) }} />
                     </div>
 
                     <div className="col-12 text-center">
-                        <button type="submit" className="btn btn-success" style={{ marginRight: '10px' }}>Sign Up</button>
+                        <button type="submit"  className="btn btn-success" style={{ marginRight: '10px' }}>Sign Up</button>
                         <input className="btn btn-danger" type="reset" value="Reset"></input>
                     </div>
 
                 </form>
             </div>
+            <StatusModal
+            show={modalShow}
+            onHide={() => {setModalShow(false);navigate("/Patient/Login")}}
+            title={title}
+            body={body}
+          />
         </div>
     );
 }
