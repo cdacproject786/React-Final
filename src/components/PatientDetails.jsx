@@ -66,10 +66,9 @@ function PatientDetails(props) {
     })
    
   };
-
   useEffect(() => {
     getData()
-    getADDData()
+    
   }, []);
 
   const [editProfile, setEditProfile] = useState(false);
@@ -122,6 +121,8 @@ function PatientDetails(props) {
     setAuth();
     navigate("/");
   };
+  
+  
   return (
     <div>
       <Navbar />

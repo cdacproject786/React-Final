@@ -48,11 +48,11 @@ function Signin(props) {
     <div>
       <Navbar></Navbar>
       <div className="container signin-panel">
-        <div class="container mt-5">
-          <div class="row justify-content-center">
-            <div class="col-md-6">
-              <div class="card">
-                <div class="card-body">
+        <div className="container mt-5">
+          <div className="row justify-content-center">
+            <div className="col-md-6">
+              <div className="card">
+                <div className="card-body">
                   <h4
                     class="card-title text-center mb-4"
                     style={{ color: "#0f583f" }}
@@ -60,11 +60,11 @@ function Signin(props) {
                     {props.name}'s Login
                   </h4>
                   <form onSubmit={loginpatient}>
-                    <div class="form-group">
-                      <label for="email">Email address</label>
+                    <div className="form-group">
+                      <label htmlFor="email">Email address</label>
                       <input
                         type="email"
-                        class="form-control"
+                        className="form-control"
                         id="email"
                         aria-describedby="emailHelp"
                         placeholder="Enter email"
@@ -72,11 +72,11 @@ function Signin(props) {
                         value={email} onChange={p => { setEmail(p.target.value) }}
                       />
                     </div>
-                    <div class="form-group">
-                      <label for="pwd">Password</label>
+                    <div className="form-group">
+                      <label htmlFor="pwd">Password</label>
                       <input
                         type="password"
-                        class="form-control"
+                        className="form-control"
                         id="pwd"
                         placeholder="Password"
                         required
@@ -89,7 +89,7 @@ function Signin(props) {
                       </button>
                     </div>
                   </form>
-                  <div class="text-center mt-3">
+                  <div className="text-center mt-3">
                     <p>Don't have an account? <Link to={props.register}>Sign up</Link></p>
                     
                     <p>

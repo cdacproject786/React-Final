@@ -12,6 +12,8 @@ import Forgotpassword from "./components/Forgotpassword";
 import ValidateOTP from "./components/ValidateOTP";
 import ResetPass from "./components/ResetPass";
 import DoctorSignin from "./pages/DoctorSignin";
+import UploadPrescription from "./ncomponents/UploadPrescription";
+import ViewPrescription from "./ncomponents/ViewPrescription";
 
 
 
@@ -31,6 +33,8 @@ const App = () => {
           <Route path="/PatientOK" element={<PatientDashboard />} />
           <Route path="/DoctorOK" element={<PatientDashboard />} />
           <Route path="/Aboutus" element={<Aboutus />} />
+          <Route path="/Upload" element={<UploadPrescription />} />
+          <Route path="/View" element={<ViewPrescription />} />
           {/* <Route path="/PatientDetails" element={<PatientDetails />} /> */}
         </Routes>
       </BrowserRouter>

@@ -12,12 +12,12 @@ function Home() {
           <div className="col-12 text-center mb-4" id='word'>
             <h1>You must identify yourself as?</h1>
           </div>
-          <div class="row d-flex justify-content-center" >
-            <div class="col-sm-6 col-md-3 mb-3">
-              <button type="button" class="btn btn-success btn-block" onClick={() => { navigate("/Patient/Login") }}>I am a Patient !</button>
+          <div className="row d-flex justify-content-center" >
+            <div className="col-sm-6 col-md-3 mb-3">
+              <button type="button" className="btn btn-success btn-block" onClick={() => { navigate("/Patient/Login") }}>I am a Patient !</button>
             </div>
-            <div class="col-sm-12 col-md-3 mb-3">
-              <button type="button" class="btn btn-success btn-block" onClick={() => { navigate("/Doctor/Login") }}>I am a Doctor !</button>
+            <div className="col-sm-12 col-md-3 mb-3">
+              <button type="button" className="btn btn-success btn-block" onClick={() => { navigate("/Doctor/Login") }}>I am a Doctor !</button>
             </div>
           </div>
         </div>

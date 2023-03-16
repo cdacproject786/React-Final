@@ -14,7 +14,7 @@ function PatientEditDetails() {
   const [validated, setValidated] = useState(false);
 
   const navigate = useNavigate()
-  const { auth, patient,address } = useAuth();
+  const { auth, patient,setAddress,address } = useAuth();
   const accessT = "Bearer " + auth.accessToken;
   const uid = auth.uid
   const addid = patient.addressid
@@ -48,25 +48,31 @@ function PatientEditDetails() {
    
   //const setadd = () => {setAddressLine1(patadd.Address_line_1);setCity(patadd.City);setState(patadd.User_State);setCountry(patadd.Country);setPincode(patadd.PinCode)}
 
-  
-
- 
-  useEffect(() => {
-
-    const result2 = axios.get("http://localhost:4001/patient/getaddressDetails/" + patient.addressid, {
+  const getADDData = async () => {
+    const result = await axios.get("http://localhost:4001/patient/getaddressDetails/" + patient.addressid, {
       headers: {
         "Content-Type": "application/json",
         Authorization: accessT,
       }
+    }).then((response) => {
+      console.log(response.data)
+      const addressline1 = response?.data?.Address_line_1
+      const city = response?.data?.City
+      const state = response?.data?.User_State
+      const country = response?.data?.Country
+      const pincode = response?.data?.PinCode
+      
+      setAddress({ addressline1,city,state,country,pincode })
     })
-      .then((resp) => {
-        console.log(resp.data);
-        setPatadd(resp.data)
-        
-      //setadd()
-      })
+   
+  };
 
-  }, [])
+ 
+  useEffect(() => {
+    getADDData()
+   
+
+  })
 
 
   const handleFileChange = (e) => {

@@ -1,21 +1,22 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 function Navbar() {
   return (
     <div className="nav-bar">
-      <nav class="navbar navbar-expand-lg" style={{ backgroundColor: "#0f583f", padding: 25,color:'#fff' }}>
-        <div class="container-fluid">
-          <div class="d-flex justify-content-start align-items-center">
+      <nav className="navbar navbar-expand-lg" style={{ backgroundColor: "#0f583f", padding: 25,color:'#fff' }}>
+        <div className="container-fluid">
+          <div className="d-flex justify-content-start align-items-center">
             <b style={{ color: "#fff" }}>•MedLog•</b>
           </div>
-          <div class="d-flex justify-content-end align-items-center">
-            <ul class="navbar-nav me-auto">
-              <li class="nav-item">Group 9</li>
-              <li class="nav-item">
-                <a href="/">Home</a>
+          <div className="d-flex justify-content-end align-items-center">
+            <ul className="navbar-nav me-auto">
+              <li className="nav-item">Group 9</li>
+              <li className="nav-item">
+                <Link to="/">Home</Link>
               </li>
-              <li class="nav-item">
-                <a href="/Aboutus">About Us</a>
+              <li className="nav-item">
+                <Link to="/Aboutus">About Us</Link>
               </li>
             </ul>
           </div>
