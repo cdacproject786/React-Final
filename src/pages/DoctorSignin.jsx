@@ -1,21 +1,26 @@
 import React, { useState } from 'react'
 import Signin from '../components/Signin'
 import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import useAuth from '../hooks/useAuth';
 
 function DoctorSignin() {
 
   let navigate = useNavigate();
-  const [email,setEmail] = useState('');
+  const {doctor,setDoctor} = useAuth("");
+  const [em,setEm] = useState("");
   const [pwd,setPwd] = useState(''); 
   const [modalShow, setModalShow] = useState(false);
   const [title,setTitle] = useState();
   const [body,setBody] = useState();
+  //const [setAuth,setID] = useAuth();
 
   const siginDoc =async (e) =>{
     e.preventDefault();
     try{ 
+      const email = doctor.emails;
+      console.log()
       let data = {email,pwd}
       console.log(data)  
        const result = await axios.post("http://localhost:9010/doctor/login",data, {
@@ -24,28 +29,25 @@ function DoctorSignin() {
            'Content-Type': 'application/json'
        }
    }).then(response => {
-    console.log(response.data)
+    console.log(response?.data)
+    console.log(response?.data?.address)
+
      console.log("After axios");
        if(response.data){
          console.log("IN Response")
-       handleStatusModal("Registration Status","Successfull !!")
        navigate("/DoctorOk")}
-       else{
-       handleStatusModal("Registration Status","Unsuccessfull !!")
-       navigate("/Doctor")
-       }
+      
    })
  } catch (error) {
-   
+   if(error.response.status===401||400){
+    console.log("IN error")
+  
+       navigate("/Doctor")
+       {document.getElementById('invalidcred').innerHTML=("Invalid credentials. Please try again.")}
+   }
  }
   }
-  const handleStatusModal = (title,body) => {
-    setTitle(title)
-    setBody(body)
-    setModalShow(true)
-    
-  }  
-
+  
   return (
     // <div>
     //   <Signin name="Doctor" register="/Doctor/Register"/>
@@ -74,8 +76,12 @@ function DoctorSignin() {
                       id="email"
                       aria-describedby="emailHelp"
                       placeholder="Enter email"
-                      value={email}
-                      onChange={(p)=>{setEmail(p.target.value)}}
+                      value={em}
+                      onChange={(p) => {
+                        const emails = p.target.value;
+                        setEm(emails);
+                        setDoctor({emails})
+                      }}
                       required
                     />
                   </div>
@@ -96,11 +102,12 @@ function DoctorSignin() {
                       Sign In
                     </button>
                   </div>
+                  <div id='invalidcred' style={{ display: "flex", justifyContent: "center", color:"red" }}></div>
                 </form>
                 <div className="text-center mt-3">
-                  Don't have an account? <Link to="/Doctor/Register">Sign up</Link>
+                  Don't have an account? <a href="/Doctor/Register">Sign up</a>
                   <p>
-                    You ain't Doctor? <Link to="/">Switch here!</Link>
+                    You ain't Doctor? <a href="/">Switch here!</a>
                   </p>
                 </div>
               </div>

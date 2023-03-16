@@ -124,3 +124,7 @@ legend{
 .CDBSidebarMenuItem{
   color: #0f583f;
 }
+#addOTP p {
+  color: #0f583f;
+  font-size: smaller;
+  }
